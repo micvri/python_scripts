@@ -2,6 +2,7 @@
 
 from termcolor import colored
 import copy
+import sys
 
 input_template = [
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -77,6 +78,42 @@ def check(sudoku, x, y):
             return i
     return 0
 
+def check_errors(sudoku):
+    for r in range(0,9):
+        for c in range(0,9):
+            i = sudoku[r][c]
+            if i != 0:
+                for col in range(0,9):
+                    if col != c:
+                        if sudoku[r][col] == i:
+                            print(colored("Error", "red"))
+                            print(i, "In", r, c,"found in col", r, col)
+                            sys.exit()
+                for row in range(0,9):
+                    if row != r:
+                        if sudoku[row][c] == i:
+                            print(colored("Error", "red"))
+                            print(i, "In", r, c, "found in row", row, c)
+                            sys.exit()
+                square_free = True
+                ro, co = 0, 0
+                if r in [1, 4, 7]:
+                    ro=1
+                if r in [2, 5, 8]:
+                    ro=2
+                if c in [1, 4, 7]:
+                    co=1
+                if c in [2, 5, 8]:
+                    co=2
+                for row in range(r,r+3):
+                    for col in range(c,c+3):
+                        if row-ro != r:
+                            if col-co != c:
+                                if sudoku[row-ro][col-co] == i:
+                                    print(colored("Error", "red"))
+                                    print(i, "In", r, c, "found in box", row-ro, col-co)
+                                    sys.exit()
+
 def recursion(sudoku, row, col):
         temp = check(sudoku, row, col)
         if temp != 0:
@@ -86,6 +123,9 @@ def recursion(sudoku, row, col):
         else:
             sudoku[row][col] = temp
             length = int (len(prev)-1)
+            if length < 0:
+                print("Number of solutions:", count)
+                sys.exit()
 #            print(prev)
 #            print_sudoku(sudoku)
             tmp = prev[length]
@@ -97,6 +137,10 @@ def recursion(sudoku, row, col):
 # Main
 print_sudoku(sudoku_input)
 
+count = 0
+
+check_errors(sudoku_input)
+
 for row in range(0,9):
     for col in range(0,9):
         if sudoku_input[row][col] == 0:
@@ -104,6 +148,14 @@ for row in range(0,9):
             last = [row, col]
 #            print_sudoku(sudoku_input)
 
-
+count+=1
 
 print_sudoku(sudoku_input)
+while True:
+#    print(last)
+    prev.remove(last)
+    recursion(sudoku_input, last[0], last[1])
+    print_sudoku(sudoku_input)
+    count+=1
+
+print("Number of solutions:", count)
