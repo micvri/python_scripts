@@ -4,6 +4,8 @@ from termcolor import colored
 import copy
 import sys
 
+sys.setrecursionlimit(5000)
+
 input_template = [
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -18,15 +20,15 @@ input_template = [
 
 
 sudoku_input = [
-        [4, 0, 0, 7, 0, 0, 0, 0, 6],
-        [0, 2, 0, 0, 0, 8, 0, 4, 9],
-        [0, 0, 9, 0, 0, 0, 0, 5, 1],
-        [1, 0, 3, 0, 9, 4, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 9, 0, 0],
-        [8, 0, 7, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 2, 0, 0, 0],
-        [0, 6, 0, 0, 0, 0, 0, 0, 7],
-        [0, 7, 2, 9, 5, 0, 0, 0, 4]
+        [9, 0, 0, 7, 0, 0, 0, 0, 8],
+        [2, 0, 3, 0, 0, 0, 0, 0, 4],
+        [0, 1, 0, 6, 2, 0, 0, 0, 0],
+        [0, 5, 2, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 7, 4, 0],
+        [0, 0, 0, 0, 6, 9, 0, 5, 0],
+        [3, 0, 0, 0, 0, 0, 6, 0, 1],
+        [8, 0, 0, 0, 0, 5, 0, 0, 7]
         ]
 
 original = copy.deepcopy(sudoku_input)
@@ -155,6 +157,7 @@ while True:
 #    print(last)
     prev.remove(last)
     recursion(sudoku_input, last[0], last[1])
+    check_errors(sudoku_input)
     print_sudoku(sudoku_input)
     count+=1
 
